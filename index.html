@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva: Rutas de Atención Escolar - IE Los Quindos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Iconos Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    },
+                    backgroundImage: {
+                        'dot-pattern': "radial-gradient(#cbd5e1 1px, transparent 1px)",
+                        'dot-pattern-dark': "radial-gradient(#334155 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Timeline Connector */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 20px;
+            width: 2px;
+            background-color: #e2e8f0;
+            z-index: 0;
+        }
+        .dark .timeline-line::before {
+            background-color: #334155;
+        }
+
+        .loader-sm {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+</head>
+<body class="antialiased text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-[#0f172a] transition-colors duration-300">
+
+    <!-- Pantalla de Inicio de Sesión -->
+    <div id="login-container" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 bg-dot-pattern dark:bg-dot-pattern-dark [background-size:20px_20px] opacity-40 pointer-events-none"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-white/80 dark:to-[#0f172a]/90 pointer-events-none"></div>
+
+        <div class="max-w-md w-full p-8 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl shadow-2xl rounded-2xl border border-white/20 dark:border-slate-700 relative z-10 mx-4">
+            <div class="text-center">
+                <div class="inline-block p-4 rounded-full bg-blue-50 dark:bg-blue-900/20 mb-4 shadow-inner">
+                    <img class="h-20 w-auto object-contain drop-shadow-md" src="https://i.postimg.cc/9fJsDW4Z/escudo.png" alt="Escudo IE Los Quindos">
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Acceso Docente</h2>
+                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                    Sistema de Gestión de Convivencia Escolar
+                </p>
+            </div>
+            
+            <form id="login-form" class="mt-8 space-y-5" action="#" method="POST">
+                <div class="space-y-4">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Usuario</label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i data-lucide="user" class="h-4 w-4 text-slate-400 group-focus-within:text-brand-500 transition-colors"></i>
+                            </div>
+                            <input id="username" name="username" type="text" required class="block w-full pl-10 pr-3 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all sm:text-sm" placeholder="Correo institucional">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Contraseña</label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i data-lucide="lock" class="h-4 w-4 text-slate-400 group-focus-within:text-brand-500 transition-colors"></i>
+                            </div>
+                            <input id="password" name="password" type="password" required class="block w-full pl-10 pr-3 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all sm:text-sm" placeholder="••••••••">
+                        </div>
+                    </div>
+                </div>
+
+                <button id="login-button" type="submit" class="w-full flex justify-center items-center py-2.5 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 dark:focus:ring-offset-slate-800 disabled:opacity-70 disabled:cursor-not-allowed transition-all shadow-lg shadow-brand-500/30 hover:shadow-brand-500/40 transform active:scale-[0.98]">
+                    <span id="login-button-icon" class="mr-2"></span>
+                    <span id="login-button-text">Ingresar al Sistema</span>
+                </button>
+                <p id="login-error" class="text-center text-sm text-red-500 dark:text-red-400 font-medium h-5" aria-live="assertive"></p>
+            </form>
+        </div>
+        
+        <div class="absolute bottom-6 text-xs text-slate-400 dark:text-slate-600">
+            &copy; 2024 IE Los Quindos. Uso exclusivo institucional.
+        </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div id="app-content" class="hidden">
+        <!-- Header -->
+        <header class="fixed w-full top-0 z-50 bg-white/80 dark:bg-[#0f172a]/80 backdrop-blur-md border-b border-slate-200/60 dark:border-slate-800/60 transition-colors duration-300">
+            <nav class="container mx-auto px-4 lg:px-8 py-3 flex justify-between items-center">
+                <a href="#" class="flex items-center gap-3 group">
+                    <img src="https://i.postimg.cc/9fJsDW4Z/escudo.png" alt="Escudo" class="h-9 w-9 group-hover:scale-105 transition-transform">
+                    <div class="flex flex-col">
+                        <h1 class="text-sm font-bold text-slate-900 dark:text-white leading-tight">IE Los Quindos</h1>
+                        <span class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-medium">Rutas de Atención</span>
+                    </div>
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center gap-1 bg-slate-100/50 dark:bg-slate-800/50 p-1 rounded-full border border-slate-200 dark:border-slate-700/50">
+                    <a href="#identificacion" class="nav-button px-4 py-1.5 text-sm font-medium rounded-full text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-white dark:hover:bg-slate-700 transition-all">Identificar</a>
+                    <a href="#protocolos" class="nav-button px-4 py-1.5 text-sm font-medium rounded-full text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-white dark:hover:bg-slate-700 transition-all">Actuar</a>
+                    <a href="#casos-especiales" class="nav-button px-4 py-1.5 text-sm font-medium rounded-full text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-white dark:hover:bg-slate-700 transition-all">Casos</a>
+                    <a href="#ai-assistant" class="nav-button px-4 py-1.5 text-sm font-bold rounded-full text-brand-600 dark:text-brand-400 bg-white dark:bg-slate-700 shadow-sm flex items-center gap-1.5">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> IA
+                    </a>
+                    <a href="#tabla-resumen" class="nav-button px-4 py-1.5 text-sm font-medium rounded-full text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-white dark:hover:bg-slate-700 transition-all">Resumen</a>
+                    <a href="#directorio" class="nav-button px-4 py-1.5 text-sm font-medium rounded-full text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-white dark:hover:bg-slate-700 transition-all">Directorio</a>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button id="theme-toggle" type="button" class="p-2 rounded-full text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500/50">
+                        <i id="theme-toggle-dark-icon" data-lucide="moon" class="hidden h-5 w-5"></i>
+                        <i id="theme-toggle-light-icon" data-lucide="sun" class="hidden h-5 w-5"></i>
+                    </button>
+                    <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" aria-label="Menu">
+                         <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </nav>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="mobile-menu-slide md:hidden bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+                <div class="px-4 pt-2 pb-4 space-y-1">
+                    <a href="#identificacion" class="block px-3 py-3 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800">Identificar</a>
+                    <a href="#protocolos" class="block px-3 py-3 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800">Actuar</a>
+                    <a href="#casos-especiales" class="block px-3 py-3 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800">Casos Especiales</a>
+                    <a href="#ai-assistant" class="block px-3 py-3 rounded-lg text-base font-bold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/20">Asistente IA</a>
+                    <a href="#tabla-resumen" class="block px-3 py-3 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800">Resumen</a>
+                    <a href="#directorio" class="block px-3 py-3 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800">Directorio</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="container mx-auto px-4 lg:px-8 pt-24 pb-16">
+
+            <!-- Hero Section -->
+            <section id="hero" class="relative mb-24 fade-in-up">
+                <!-- Decorative background elements -->
+                <div class="absolute inset-0 bg-dot-pattern dark:bg-dot-pattern-dark [background-size:20px_20px] opacity-60 pointer-events-none -z-10 h-full w-full mask-image-gradient"></div>
+                
+                <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+                    <div class="lg:w-1/2 text-center lg:text-left space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-brand-600 dark:text-brand-400 text-xs font-bold uppercase tracking-widest border border-blue-100 dark:border-blue-800">
+                            <span class="flex h-2 w-2 relative">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                            </span>
+                            Herramienta Institucional
+                        </div>
+                        <h2 class="text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+                            Gestión Integral de <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-cyan-500">Convivencia Escolar</span>
+                        </h2>
+                        <p class="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                            Guía oficial basada en la Ley 1620 y el Decreto 1965 para la activación oportuna de rutas, con enfoque formativo y garantía de derechos.
+                        </p>
+                        
+                        <div class="flex flex-wrap justify-center lg:justify-start gap-4 pt-2">
+                            <a href="https://docs.google.com/forms/d/e/1FAIpQLSf97G2I-k5xl9XjrlPgodQP8VqkAqfyF1s66qtwDoTSXsMabg/viewform?usp=preview" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-brand-600 text-white font-semibold rounded-xl shadow-lg shadow-brand-500/25 hover:bg-brand-700 hover:shadow-brand-500/40 transition-all transform hover:-translate-y-0.5">
+                                <i data-lucide="file-signature" class="h-5 w-5"></i>
+                                Acta Convivencia
+                            </a>
+                            <a href="https://docs.google.com/forms/d/e/1FAIpQLSc63gIinRUc20Yg58lCnCL8P3HuGDH2YFY_0tYZTjY4KxzIGA/viewform?usp=preview" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white dark:bg-slate-800 text-slate-700 dark:text-white font-semibold rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-all transform hover:-translate-y-0.5">
+                                <i data-lucide="route" class="h-5 w-5 text-slate-500 dark:text-slate-400"></i>
+                                Iniciar Ruta
+                            </a>
+                        </div>
+
+                         <div class="pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-wrap gap-4 items-center justify-center lg:justify-start">
+                             <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Descargas:</span>
+                             <a href="https://drive.google.com/uc?export=download&id=1t5aLuI4lD1xsUolXwz1whggRqvHy_6q6" class="text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 flex items-center gap-1 transition-colors"><i data-lucide="download" class="w-3 h-3"></i> Acta Digital</a>
+                             <span class="text-slate-300 dark:text-slate-700">•</span>
+                             <a href="https://drive.google.com/uc?export=download&id=1loaNHK77ny5mSTeMezJhsE9nW6VhBds-" class="text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 flex items-center gap-1 transition-colors"><i data-lucide="download" class="w-3 h-3"></i> Acta Incumplimiento</a>
+                             <span class="text-slate-300 dark:text-slate-700">•</span>
+                             <a href="https://drive.google.com/uc?export=download&id=1gt0DYna1561WuEPg4HMjvxNlFZd8VLrT" class="text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 flex items-center gap-1 transition-colors"><i data-lucide="book-open" class="w-3 h-3"></i> Manual</a>
+                         </div>
+                    </div>
+                    
+                    <div class="lg:w-1/2 relative group">
+                        <div class="absolute inset-0 bg-brand-500 rounded-2xl rotate-1 opacity-20 group-hover:rotate-2 transition-transform duration-500 blur-sm"></div>
+                        <!-- CAMBIO REALIZADO: Se eliminó 'object-cover' y 'aspect-[16/10]', se añadió 'h-auto' para mostrar la imagen completa sin recortes -->
+                        <img src="https://i.postimg.cc/VN6nHMHm/Imagen1.jpg" alt="Estudiantes" class="relative rounded-2xl shadow-2xl w-full h-auto border-4 border-white dark:border-slate-800" onerror="this.onerror=null;this.src='https://placehold.co/800x500/1e293b/e0f2fe?text=Convivencia+Escolar';">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Steps Section -->
+            <section id="identificacion" class="mb-24 scroll-mt-28">
+                <div class="text-center mb-16">
+                    <h3 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Clasificación de Situaciones</h3>
+                    <p class="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto text-lg">Identifique correctamente el tipo de falta para activar la ruta pertinente. Haga clic en una tarjeta para ver el protocolo.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Card Tipo I -->
+                    <div id="btn-tipo-1" class="group bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm hover:shadow-xl border border-slate-200 dark:border-slate-700 hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-all cursor-pointer relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="message-circle" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Situación Tipo I</h4>
+                        <span class="text-xs font-semibold text-blue-600/80 dark:text-blue-400/80 uppercase tracking-wide">Conflictos Manejables</span>
+                        <p class="mt-3 text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Conflictos esporádicos que inciden negativamente en el clima escolar pero no generan daños al cuerpo o a la salud.
+                        </p>
+                    </div>
+
+                    <!-- Card Tipo II -->
+                    <div id="btn-tipo-2" class="group bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm hover:shadow-xl border border-slate-200 dark:border-slate-700 hover:border-orange-500/50 dark:hover:border-orange-500/50 transition-all cursor-pointer relative overflow-hidden">
+                         <div class="absolute top-0 left-0 w-1 h-full bg-orange-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="w-12 h-12 rounded-xl bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">Situación Tipo II</h4>
+                        <span class="text-xs font-semibold text-orange-600/80 dark:text-orange-400/80 uppercase tracking-wide">Acoso y Agresión</span>
+                        <p class="mt-3 text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Agresión escolar, acoso (bullying) y ciberacoso. Causan daños al cuerpo o salud sin ser delito.
+                        </p>
+                    </div>
+
+                    <!-- Card Tipo III -->
+                    <div id="btn-tipo-3" class="group bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm hover:shadow-xl border border-slate-200 dark:border-slate-700 hover:border-red-500/50 dark:hover:border-red-500/50 transition-all cursor-pointer relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-red-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="shield-alert" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">Situación Tipo III</h4>
+                        <span class="text-xs font-semibold text-red-600/80 dark:text-red-400/80 uppercase tracking-wide">Presuntos Delitos</span>
+                        <p class="mt-3 text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Conductas punibles ante la ley colombiana. Requieren intervención inmediata de autoridades externas.
+                        </p>
+                    </div>
+
+                    <!-- Card Incumplimiento -->
+                    <div id="btn-incumplimiento" class="group bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm hover:shadow-xl border border-slate-200 dark:border-slate-700 hover:border-teal-500/50 dark:hover:border-teal-500/50 transition-all cursor-pointer relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-teal-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="w-12 h-12 rounded-xl bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="clipboard-list" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">Académico</h4>
+                        <span class="text-xs font-semibold text-teal-600/80 dark:text-teal-400/80 uppercase tracking-wide">Incumplimiento</span>
+                        <p class="mt-3 text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Faltas reiteradas a deberes escolares, inasistencia o impuntualidad. Manejo formativo interno.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Protocol Display Section -->
+            <section id="protocolos" class="mb-24 bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden scroll-mt-28 transition-all duration-500">
+                <div class="p-8 md:p-12">
+                    <div id="protocolo-instruccion" class="text-center py-12">
+                        <div class="inline-block p-4 rounded-full bg-slate-50 dark:bg-slate-700 mb-4 text-slate-300 dark:text-slate-500">
+                            <i data-lucide="mouse-pointer-click" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="text-xl font-medium text-slate-600 dark:text-slate-300">Seleccione un tipo de situación arriba</h4>
+                        <p class="text-slate-400 text-sm mt-1">El protocolo detallado aparecerá aquí.</p>
+                    </div>
+
+                    <div id="protocolo-content" class="hidden fade-in-up">
+                        <!-- Content injected dynamically via JS logic (Show/Hide) -->
+                        
+                        <!-- Wrapper for Tipo I -->
+                        <div id="protocolo-tipo-1" class="hidden">
+                            <div class="flex items-center gap-4 mb-8 pb-6 border-b border-slate-100 dark:border-slate-700">
+                                <div class="p-3 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                                    <i data-lucide="message-circle" class="w-8 h-8"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Protocolo Tipo I</h3>
+                                    <p class="text-blue-600 dark:text-blue-400 font-medium">Manejo de Conflictos y Faltas Leves</p>
+                                </div>
+                            </div>
+                            
+                            <div class="relative pl-6 space-y-8 timeline-line">
+                                <div class="relative z-10">
+                                    <div class="absolute -left-[33px] top-0 w-8 h-8 rounded-full bg-white dark:bg-slate-800 border-4 border-blue-100 dark:border-blue-900 flex items-center justify-center">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
+                                    </div>
+                                    <h5 class="text-lg font-bold text-slate-800 dark:text-slate-200">1. Intervención Inmediata</h5>
+                                    <p class="mt-2 text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                                        El docente o adulto presente interviene para detener la situación. Separa a los involucrados y genera un espacio de calma.
+                                    </p>
+                                </div>
+                                <div class="relative z-10">
+                                    <div class="absolute -left-[33px] top-0 w-8 h-8 rounded-full bg-white dark:bg-slate-800 border-4 border-blue-100 dark:border-blue-900 flex items-center justify-center">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
+                                    </div>
+                                    <h5 class="text-lg font-bold text-slate-800 dark:text-slate-200">2. Mediación Pedagógica</h5>
+                                    <p class="mt-2 text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                                        Escucha activa de las partes. Buscar que reconozcan el error y la afectación al otro. No buscar culpables, sino soluciones.
+                                    </p>
+                                </div>
+                                <div class="relative z-10">
+                                    <div class="absolute -left-[33px] top-0 w-8 h-8 rounded-full bg-white dark:bg-slate-800 border-4 border-blue-100 dark:border-blue-900 flex items-center justify-center">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
+                                    </div>
+                                    <h5 class="text-lg font-bold text-slate-800 dark:text-slate-200">3. Acuerdos y Registro</h5>
+                                    <p class="mt-2 text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                                        Establecer compromisos restaurativos. Dejar constancia escrita en el observador del estudiante o formato de atención.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Wrapper for Tipo II -->
+                        <div id="protocolo-tipo-2" class="hidden">
+                             <div class="flex items-center gap-4 mb-8 pb-6 border-b border-slate-100 dark:border-slate-700">
+                                <div class="p-3 rounded-xl bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400">
+                                    <i data-lucide="alert-triangle" class="w-8 h-8"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Protocolo Tipo II</h3>
+                                    <p class="text-orange-600 dark:text-orange-400 font-medium">Atención de Acoso Escolar y Agresión</p>
+                                </div>
+                            </div>
+                            
+                            <div class="relative pl-6 space-y-8 timeline-line">
+                                <div class="relative z-10">
+                                    <div class="absolute -left-[33px] top-0 w-8 h-8 rounded-full bg-white dark:bg-slate-800 border-4 border-orange-100 dark:border-orange-900 flex items-center justify-center">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-orange-500"></div>
+                                    </div>
+                                    <h5 class="text-lg font-bold text-slate-800 dark:text-slate-200">1. Atención en Salud</h5>
+                                    <p class="mt-2 text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                                        Verificar estado físico y emocional. Remitir a enfermería o EPS si es necesario. Brindar primeros auxilios psicológicos.
+                                    </p>
+                                </div>
+                                <div class="relative z-10">
+                                    <div class="absolute -left-[33px] top-0 w-8 h-8 rounded-full bg-white dark:bg-slate-800 border-4 border-orange-100 dark:border-orange-900 flex items-center justify-center">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-orange-500"></div>
+                                    </div>
+                                    <h5 class="text-lg font-bold text-slate-800 dark:text-slate-200">2. Comunicación a Familias</h5>
+                                    <p class="mt-2 text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                                        Informar inmediatamente a padres/acudientes de la víctima y del presunto agresor. Citarlos por separado.
+                                    </p>
+                                </div>
+                                <div class="relative z-10">
+                                    <div class="absolute -left-[33px] top-0 w-8 h-8 rounded-full bg-white dark:bg-slate-800 border-4 border-orange-100 dark:border-orange-900 flex items-center justify-center">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-orange-500"></div>
+                                    </div>
+                                    <h5 class="text-lg font-bold text-slate-800 dark:text-slate-200">3. Reporte SIUCE y Protección</h5>
+                                    <p class="mt-2 text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                                        Registrar el caso en el Sistema de Información Unificado. Si amerita, reportar a ICBF (141) o Comisaría de Familia.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Wrapper for Tipo III -->
+                        <div id="protocolo-tipo-3" class="hidden">
+                             <div class="flex items-center gap-4 mb-8 pb-6 border-b border-slate-100 dark:border-slate-700">
+                                <div class="p-3 rounded-xl bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">
+                                    <i data-lucide="shield-alert" class="w-8 h-8"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Protocolo Tipo III</h3>
+                                    <p class="text-red-600 dark:text-red-400 font-medium">Presuntos Delitos (No Mediar)</p>
+                                </div>
+                            </div>
+
+                            <div class="mb-6 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 flex items-start gap-3">
+                                <i data-lucide="ban" class="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5"></i>
+                                <p class="text-sm text-red-800 dark:text-red-200 font-medium">
+                                    En estos casos está PROHIBIDO realizar mediación o conciliación. La institución protege y reporta, no investiga el delito.
+                                </p>
+                            </div>
+                            
+                            <div class="relative pl-6 space-y-8 timeline-line">
+                                <div class="relative z-10">
+                                    <div class="absolute -left-[33px] top-0 w-8 h-8 rounded-full bg-white dark:bg-slate-800 border-4 border-red-100 dark:border-red-900 flex items-center justify-center">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                                    </div>
+                                    <h5 class="text-lg font-bold text-slate-800 dark:text-slate-200">1. Protección y Denuncia</h5>
+                                    <p class="mt-2 text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                                        Aislar a la víctima del peligro. El Rector/a debe reportar inmediatamente a la <strong>Policía de Infancia (123)</strong>.
+                                    </p>
+                                </div>
+                                <div class="relative z-10">
+                                    <div class="absolute -left-[33px] top-0 w-8 h-8 rounded-full bg-white dark:bg-slate-800 border-4 border-red-100 dark:border-red-900 flex items-center justify-center">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                                    </div>
+                                    <h5 class="text-lg font-bold text-slate-800 dark:text-slate-200">2. Activación Ruta Salud/Fiscalía</h5>
+                                    <p class="mt-2 text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                                        Remitir a centro médico de urgencias (vital en violencia sexual). Informar a padres. Denunciar ante Fiscalía/URI.
+                                    </p>
+                                </div>
+                                <div class="relative z-10">
+                                    <div class="absolute -left-[33px] top-0 w-8 h-8 rounded-full bg-white dark:bg-slate-800 border-4 border-red-100 dark:border-red-900 flex items-center justify-center">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                                    </div>
+                                    <h5 class="text-lg font-bold text-slate-800 dark:text-slate-200">3. Reporte Obligatorio</h5>
+                                    <p class="mt-2 text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                                        Reportar al ICBF para restablecimiento de derechos. Registrar detalladamente en el SIUCE.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Wrapper for Incumplimiento -->
+                        <div id="protocolo-incumplimiento" class="hidden">
+                             <div class="flex items-center gap-4 mb-8 pb-6 border-b border-slate-100 dark:border-slate-700">
+                                <div class="p-3 rounded-xl bg-teal-100 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400">
+                                    <i data-lucide="clipboard-list" class="w-8 h-8"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Incumplimiento de Deberes</h3>
+                                    <p class="text-teal-600 dark:text-teal-400 font-medium">Proceso Formativo Académico</p>
+                                </div>
+                            </div>
+                            
+                            <div class="relative pl-6 space-y-8 timeline-line">
+                                <div class="relative z-10">
+                                    <div class="absolute -left-[33px] top-0 w-8 h-8 rounded-full bg-white dark:bg-slate-800 border-4 border-teal-100 dark:border-teal-900 flex items-center justify-center">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-teal-500"></div>
+                                    </div>
+                                    <h5 class="text-lg font-bold text-slate-800 dark:text-slate-200">1. Diálogo Reflexivo</h5>
+                                    <p class="mt-2 text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                                        Docente dialoga con estudiante para identificar causas (pedagógicas, personales). Establecer acuerdos verbales.
+                                    </p>
+                                </div>
+                                <div class="relative z-10">
+                                    <div class="absolute -left-[33px] top-0 w-8 h-8 rounded-full bg-white dark:bg-slate-800 border-4 border-teal-100 dark:border-teal-900 flex items-center justify-center">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-teal-500"></div>
+                                    </div>
+                                    <h5 class="text-lg font-bold text-slate-800 dark:text-slate-200">2. Compromiso Escrito</h5>
+                                    <p class="mt-2 text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                                        Si persiste, firmar compromiso en el observador. Comunicar al acudiente telefónicamente o por agenda.
+                                    </p>
+                                </div>
+                                <div class="relative z-10">
+                                    <div class="absolute -left-[33px] top-0 w-8 h-8 rounded-full bg-white dark:bg-slate-800 border-4 border-teal-100 dark:border-teal-900 flex items-center justify-center">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-teal-500"></div>
+                                    </div>
+                                    <h5 class="text-lg font-bold text-slate-800 dark:text-slate-200">3. Citación y Seguimiento</h5>
+                                    <p class="mt-2 text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                                        Citar al acudiente para plan de mejoramiento. Si no hay avances, remitir a Orientación Escolar.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+             <!-- Special Cases Accordion -->
+            <section id="casos-especiales" class="mb-24 scroll-mt-28">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                    <div>
+                        <span class="text-brand-600 dark:text-brand-400 font-bold uppercase text-xs tracking-wider mb-2 block">Paso 3</span>
+                        <h3 class="text-3xl font-bold text-slate-900 dark:text-white">Casos de Alta Complejidad</h3>
+                    </div>
+                    <p class="text-slate-500 dark:text-slate-400 max-w-md text-sm md:text-right">
+                        Situaciones que requieren un manejo intersectorial específico por su gravedad o naturaleza.
+                    </p>
+                </div>
+                <div class="space-y-4 max-w-4xl mx-auto">
+                    <!-- Accordion Items injected by JS -->
+                </div>
+            </section>
+
+            <!-- AI Section (Redesigned) -->
+            <section id="ai-assistant" class="mb-24 scroll-mt-28">
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-1 shadow-2xl overflow-hidden relative">
+                    <!-- Glow effect -->
+                    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-500/20 blur-[100px] rounded-full pointer-events-none -mr-32 -mt-32"></div>
+                    
+                    <div class="bg-[#0f172a] rounded-[20px] p-8 md:p-12 relative z-10 h-full">
+                        <div class="flex flex-col md:flex-row gap-12 items-start">
+                            <div class="md:w-1/3 space-y-6">
+                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-bold uppercase tracking-wider">
+                                    <i data-lucide="bot" class="w-4 h-4"></i> Asistente Inteligente
+                                </div>
+                                <h3 class="text-3xl font-bold leading-tight">
+                                    Análisis de Casos con <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-cyan-400">Gemini AI</span>
+                                </h3>
+                                <p class="text-slate-400 leading-relaxed">
+                                    Describe la situación escolar y recibe una sugerencia de clasificación y ruta basada en la normativa vigente.
+                                </p>
+                                <a href="https://notebooklm.google.com/notebook/85fcda3d-2924-4257-a518-b10ea9f9d3e2" target="_blank" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-sm font-medium transition-colors backdrop-blur-sm text-slate-200 hover:text-white group">
+                                    <i data-lucide="book-open" class="w-4 h-4 text-brand-400 group-hover:text-brand-300"></i>
+                                    Consultar Manual en NotebookLM
+                                </a>
+                                <div class="text-xs text-slate-500 pt-4 border-t border-slate-800">
+                                    * La IA actúa como herramienta de apoyo. El criterio final recae en el Comité de Convivencia.
+                                </div>
+                            </div>
+
+                            <div class="md:w-2/3 w-full space-y-6">
+                                <div class="relative group">
+                                    <div class="absolute -inset-0.5 bg-gradient-to-r from-brand-500 to-cyan-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                                    <div class="relative bg-slate-900 rounded-xl p-2 border border-slate-700">
+                                        <textarea id="ai-prompt-input" class="w-full bg-transparent border-none text-slate-200 placeholder-slate-600 p-4 focus:ring-0 resize-none text-base" rows="4" placeholder="Ej: 'Un estudiante fue sorprendido por segunda vez consumiendo un vapeador en el baño'"></textarea>
+                                        <div class="flex justify-between items-center px-4 pb-2 pt-2 border-t border-slate-800">
+                                            <span class="text-xs text-slate-500 italic"><i data-lucide="lock" class="w-3 h-3 inline mr-1"></i>Procesamiento anónimo</span>
+                                            <button id="ai-analyze-button" class="bg-brand-600 hover:bg-brand-500 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-all shadow-lg shadow-brand-900/50 flex items-center gap-2">
+                                                <i data-lucide="zap" class="w-4 h-4"></i> Analizar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="ai-response-container" class="hidden">
+                                    <!-- Results injected here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Directory / Summary -->
+            <section id="tabla-resumen" class="mb-24 scroll-mt-28">
+                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-8 text-center">Resumen de Rutas de Activación</h3>
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead class="bg-slate-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 uppercase text-xs font-semibold tracking-wider">
+                                <tr>
+                                    <th class="px-6 py-4">Tipo de Situación</th>
+                                    <th class="px-6 py-4">Entidades a Reportar</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-700 text-slate-600 dark:text-slate-300">
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors"><td class="px-6 py-4 font-medium text-slate-900 dark:text-white">Tipo I (Conflictos)</td><td class="px-6 py-4">Comité de Convivencia (Interno).</td></tr>
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors"><td class="px-6 py-4 font-medium text-slate-900 dark:text-white">Tipo II (Acoso Escolar)</td><td class="px-6 py-4">EPS, ICBF (141), Comisaría de Familia.</td></tr>
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors bg-red-50/50 dark:bg-red-900/10"><td class="px-6 py-4 font-bold text-red-700 dark:text-red-400">Tipo III (Delitos)</td><td class="px-6 py-4 font-medium text-red-700 dark:text-red-400">Policía (123), Fiscalía, ICBF.</td></tr>
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors"><td class="px-6 py-4 font-medium text-slate-900 dark:text-white">Violencia Sexual</td><td class="px-6 py-4"><strong>Salud (Urgencias)</strong>, Fiscalía (CAIVAS), ICBF.</td></tr>
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors"><td class="px-6 py-4 font-medium text-slate-900 dark:text-white">Consumo SPA</td><td class="px-6 py-4">Ruta Salud (EPS) y Apoyo Familiar.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+             <section id="directorio" class="mb-16 scroll-mt-28">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-red-100 dark:border-slate-700 text-center hover:-translate-y-1 transition-transform duration-300">
+                        <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="phone-call" class="w-6 h-6"></i>
+                        </div>
+                        <h5 class="font-bold text-slate-900 dark:text-white">Emergencias</h5>
+                        <p class="text-3xl font-extrabold text-red-600 my-2">123</p>
+                        <p class="text-xs text-slate-500 uppercase tracking-wide">Policía Nacional</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-blue-100 dark:border-slate-700 text-center hover:-translate-y-1 transition-transform duration-300">
+                         <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        </div>
+                        <h5 class="font-bold text-slate-900 dark:text-white">ICBF</h5>
+                        <p class="text-3xl font-extrabold text-blue-600 my-2">141</p>
+                        <p class="text-xs text-slate-500 uppercase tracking-wide">Protección Infantil</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-purple-100 dark:border-slate-700 text-center hover:-translate-y-1 transition-transform duration-300">
+                         <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="school" class="w-6 h-6"></i>
+                        </div>
+                        <h5 class="font-bold text-slate-900 dark:text-white">Orientación</h5>
+                        <p class="text-sm font-semibold text-purple-600 my-4 break-all">orientacion@ielosquindos.edu.co</p>
+                        <p class="text-xs text-slate-500 uppercase tracking-wide">Contacto Interno</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="bg-white dark:bg-[#0b1120] border-t border-slate-200 dark:border-slate-800">
+            <div class="container mx-auto px-6 py-12 flex flex-col items-center">
+                 <img src="https://i.postimg.cc/9fJsDW4Z/escudo.png" alt="Escudo" class="h-10 w-10 opacity-50 grayscale mb-4">
+                <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Institución Educativa Los Quindos</p>
+                <p class="text-slate-400 dark:text-slate-600 text-xs mt-2 text-center max-w-md">
+                    Herramienta pedagógica basada en la normativa colombiana. © 2024.
+                </p>
+            </div>
+        </footer>
+
+        <!-- Floating Action Button -->
+        <a href="#ai-assistant" class="fixed bottom-6 right-6 bg-brand-600 hover:bg-brand-500 text-white p-4 rounded-full shadow-xl shadow-brand-500/40 transition-all transform hover:scale-105 z-40 group flex items-center justify-center" aria-label="Abrir Asistente IA">
+             <i data-lucide="bot" class="w-6 h-6"></i>
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            const accordionData = [
+                { title: 'Presunta Violencia Sexual', content: `<p class="mb-2 text-slate-700 dark:text-slate-300"><strong>Situación Tipo III.</strong> Prioridad absoluta: Salud física y mental.</p><ul class="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400 text-sm"><li>NO interrogar ni revictimizar.</li><li>Remitir urgencias (Código Fucsia/Kit Profilaxis < 72h).</li><li>Reportar a Fiscalía (CAIVAS) e ICBF.</li></ul>` },
+                { title: 'Consumo/Porte de SPA', content: `<p class="mb-2 text-slate-700 dark:text-slate-300">Diferenciar consumo de expendio.</p><ul class="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400 text-sm"><li><strong>Consumo:</strong> Salud Pública. Activar ruta EPS y Familia.</li><li><strong>Expendio:</strong> Delito (Tipo III). Reportar a Policía de Infancia (123).</li></ul>` },
+                { title: 'Porte de Armas', content: `<p class="mb-2 text-slate-700 dark:text-slate-300"><strong>Situación Tipo III.</strong> Riesgo inminente.</p><ul class="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400 text-sm"><li>Aislar estudiante sin riesgo propio.</li><li>Llamar Policía (123) inmediatamente.</li><li>Informar padres.</li></ul>` },
+                { title: 'Ideación Suicida', content: `<p class="mb-2 text-slate-700 dark:text-slate-300">Emergencia Vital.</p><ul class="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400 text-sm"><li>No dejar solo al estudiante.</li><li>Llamar Línea 123 y Familia.</li><li>Remisión prioritaria a EPS.</li></ul>` }
+            ];
+
+            const app = {
+                // DOM Elements
+                loginContainer: document.getElementById('login-container'),
+                appContent: document.getElementById('app-content'),
+                loginForm: document.getElementById('login-form'),
+                loginButton: document.getElementById('login-button'),
+                loginError: document.getElementById('login-error'),
+                loginButtonIcon: document.getElementById('login-button-icon'),
+                loginButtonText: document.getElementById('login-button-text'),
+                // Protocol Elements
+                btnTipo1: document.getElementById('btn-tipo-1'),
+                btnTipo2: document.getElementById('btn-tipo-2'),
+                btnTipo3: document.getElementById('btn-tipo-3'),
+                btnIncumplimiento: document.getElementById('btn-incumplimiento'),
+                protocoloContent: document.getElementById('protocolo-content'),
+                protocoloInstruccion: document.getElementById('protocolo-instruccion'),
+                protocoloTipo1: document.getElementById('protocolo-tipo-1'),
+                protocoloTipo2: document.getElementById('protocolo-tipo-2'),
+                protocoloTipo3: document.getElementById('protocolo-tipo-3'),
+                protocoloIncumplimiento: document.getElementById('protocolo-incumplimiento'),
+                protocolosSection: document.getElementById('protocolos'),
+                // UI Elements
+                mobileMenuButton: document.getElementById('mobile-menu-button'),
+                mobileMenu: document.getElementById('mobile-menu'),
+                accordionContainer: document.querySelector('#casos-especiales .space-y-4'),
+                // AI Elements
+                aiPromptInput: document.getElementById('ai-prompt-input'),
+                aiAnalyzeButton: document.getElementById('ai-analyze-button'),
+                aiResponseContainer: document.getElementById('ai-response-container'),
+                // Theme Elements
+                themeToggleBtn: document.getElementById('theme-toggle'),
+                themeToggleDarkIcon: document.getElementById('theme-toggle-dark-icon'),
+                themeToggleLightIcon: document.getElementById('theme-toggle-light-icon'),
+                navLinks: document.querySelectorAll('.nav-button'),
+                sections: document.querySelectorAll('section[id]'),
+
+                init() {
+                    this.initTheme();
+                    this.initLogin();
+                    this.initProtocols();
+                    this.initAccordions();
+                    this.initMobileMenu();
+                    this.initAI();
+                    this.initNavObserver();
+                },
+
+                initTheme() {
+                    const toggleTheme = () => {
+                        document.documentElement.classList.toggle('dark');
+                        localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                        updateIcons();
+                    };
+
+                    const updateIcons = () => {
+                        if (document.documentElement.classList.contains('dark')) {
+                            this.themeToggleLightIcon.classList.remove('hidden');
+                            this.themeToggleDarkIcon.classList.add('hidden');
+                        } else {
+                            this.themeToggleLightIcon.classList.add('hidden');
+                            this.themeToggleDarkIcon.classList.remove('hidden');
+                        }
+                    };
+                    
+                    this.themeToggleBtn.addEventListener('click', toggleTheme);
+                    updateIcons();
+                },
+
+                initLogin() {
+                    this.loginForm.addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        this.loginButton.disabled = true;
+                        this.loginButtonText.textContent = 'Verificando...';
+                        this.loginButtonIcon.innerHTML = '<div class="loader-sm"></div>';
+                        this.loginError.textContent = '';
+
+                        const username = document.getElementById('username').value;
+                        const password = document.getElementById('password').value;
+                        const AUTH_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwiEYR5d64xEAzE6kEQxFKJPWRpouFwk7JxqR8F_5Un168l8CXbsIJnG6pw9pdkVcNomw/exec';
+
+                        try {
+                            const response = await fetch(AUTH_SCRIPT_URL, {
+                                method: 'POST',
+                                mode: 'cors',
+                                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                                body: JSON.stringify({ usuario: username, contrasena: password })
+                            });
+                            
+                            if (!response.ok) throw new Error(`Error de red: ${response.status}`);
+                            
+                            const result = await response.json();
+                            if (result.success) {
+                                this.loginContainer.classList.add('hidden'); // Use CSS class for better transition control if needed
+                                this.appContent.classList.remove('hidden');
+                                lucide.createIcons();
+                            } else {
+                                throw new Error(result.error || 'Credenciales incorrectas.');
+                            }
+                        } catch (error) {
+                            this.loginError.textContent = error.message;
+                        } finally {
+                            this.loginButton.disabled = false;
+                            this.loginButtonText.textContent = 'Ingresar al Sistema';
+                            this.loginButtonIcon.innerHTML = '';
+                        }
+                    });
+                },
+                
+                initProtocols() {
+                    const protocolMap = {
+                        1: { div: this.protocoloTipo1, btn: this.btnTipo1, borderClass: 'border-blue-500', shadowClass: 'shadow-blue-200' },
+                        2: { div: this.protocoloTipo2, btn: this.btnTipo2, borderClass: 'border-orange-500', shadowClass: 'shadow-orange-200' },
+                        3: { div: this.protocoloTipo3, btn: this.btnTipo3, borderClass: 'border-red-500', shadowClass: 'shadow-red-200' },
+                        4: { div: this.protocoloIncumplimiento, btn: this.btnIncumplimiento, borderClass: 'border-teal-500', shadowClass: 'shadow-teal-200' },
+                    };
+                    
+                    const showProtocol = (type) => {
+                        this.protocoloInstruccion.classList.add('hidden');
+                        this.protocoloContent.classList.remove('hidden');
+                        
+                        // Reset all buttons
+                        Object.values(protocolMap).forEach(({div, btn}) => {
+                            div.classList.add('hidden');
+                            btn.classList.remove('ring-2', 'ring-brand-500', 'bg-slate-50', 'dark:bg-slate-700', 'transform', 'scale-[1.02]');
+                        });
+
+                        const selected = protocolMap[type];
+                        if (selected) {
+                            selected.div.classList.remove('hidden');
+                            // Highlight selected card subtly
+                            selected.btn.classList.add('ring-2', 'ring-brand-500', 'bg-slate-50', 'dark:bg-slate-700', 'transform', 'scale-[1.02]');
+                        }
+                        
+                        setTimeout(() => {
+                           this.protocolosSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 100);
+                    };
+
+                    this.btnTipo1.addEventListener('click', () => showProtocol(1));
+                    this.btnTipo2.addEventListener('click', () => showProtocol(2));
+                    this.btnTipo3.addEventListener('click', () => showProtocol(3));
+                    this.btnIncumplimiento.addEventListener('click', () => showProtocol(4));
+                },
+                
+                initAccordions() {
+                    accordionData.forEach((item, index) => {
+                        const accordionItem = document.createElement('div');
+                        accordionItem.className = 'bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden transition-all';
+                        accordionItem.innerHTML = `
+                            <button class="accordion-header w-full flex justify-between items-center p-5 text-left font-semibold text-slate-800 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors" aria-expanded="false" aria-controls="accordion-content-${index}">
+                                <span>${item.title}</span>
+                                <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-slate-400 transition-transform duration-300"></i>
+                            </button>
+                            <div id="accordion-content-${index}" class="accordion-content bg-slate-50/50 dark:bg-slate-900/30" role="region">
+                                <div class="p-5 text-slate-600 dark:text-slate-400 border-t border-slate-100 dark:border-slate-700 leading-relaxed">${item.content}</div>
+                            </div>`;
+                        this.accordionContainer.appendChild(accordionItem);
+                    });
+                    lucide.createIcons();
+
+                    document.querySelectorAll('.accordion-header').forEach(header => {
+                        header.addEventListener('click', () => {
+                            const content = header.nextElementSibling;
+                            const icon = header.querySelector('.accordion-icon');
+                            const isOpening = !content.style.maxHeight;
+
+                            document.querySelectorAll('.accordion-content').forEach(c => c.style.maxHeight = null);
+                            document.querySelectorAll('.accordion-icon').forEach(i => i.style.transform = 'rotate(0deg)');
+                            
+                            if (isOpening) {
+                                content.style.maxHeight = content.scrollHeight + "px";
+                                icon.style.transform = 'rotate(180deg)';
+                            }
+                        });
+                    });
+                },
+
+                initMobileMenu() {
+                    this.mobileMenuButton.addEventListener('click', () => {
+                        const isExpanded = this.mobileMenu.style.maxHeight;
+                        this.mobileMenu.style.maxHeight = isExpanded ? null : this.mobileMenu.scrollHeight + "px";
+                    });
+
+                    document.querySelectorAll('#mobile-menu a').forEach(anchor => {
+                        anchor.addEventListener('click', () => {
+                             this.mobileMenu.style.maxHeight = null;
+                        });
+                    });
+                },
+
+                async fetchWithRetry(url, options, retries = 3, delay = 1000) {
+                    try {
+                        return await fetch(url, options);
+                    } catch (error) {
+                        if (retries > 0) {
+                            await new Promise(res => setTimeout(res, delay));
+                            return this.fetchWithRetry(url, options, retries - 1, delay * 2);
+                        }
+                        throw new Error("La solicitud a la API falló. Verifique su conexión.");
+                    }
+                },
+                
+                escapeHTML(str) {
+                    if (typeof str !== 'string') return '';
+                    return str.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m]);
+                },
+
+                initAI() {
+                    this.aiAnalyzeButton.addEventListener('click', async () => {
+                        const userInput = this.aiPromptInput.value.trim();
+                        if (!userInput) {
+                            this.aiResponseContainer.innerHTML = '<div class="mt-4 p-3 bg-red-900/30 text-red-200 border border-red-800 rounded-lg text-sm">Por favor, describe una situación para que la IA pueda analizarla.</div>';
+                            this.aiResponseContainer.classList.remove('hidden');
+                            return;
+                        }
+
+                        this.aiAnalyzeButton.disabled = true;
+                        this.aiAnalyzeButton.innerHTML = '<div class="loader-sm mr-2"></div> Analizando...';
+                        this.aiResponseContainer.classList.remove('hidden');
+                        this.aiResponseContainer.innerHTML = `
+                            <div class="mt-6 space-y-3 animate-pulse">
+                                <div class="h-4 bg-slate-700 rounded w-1/4"></div>
+                                <div class="h-20 bg-slate-800 rounded w-full"></div>
+                                <div class="h-4 bg-slate-700 rounded w-1/2"></div>
+                            </div>`;
+                        
+                        const apiKey = ""; // La clave se inyecta automáticamente en este entorno
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+                        // --- AQUÍ PEGAS EL TEXTO DE TU MANUAL ---
+                        const manualDeConvivenciaText = `
+                            [ESPACIO RESERVADO PARA EL MANUAL DE CONVIVENCIA]
+                            Por favor, reemplaza este texto con el contenido de tu NotebookLM.
+                            Ejemplo:
+                            "Artículo 15. Clasificación de faltas. Las situaciones se clasifican en Tipo I, II y III.
+                             Se consideran faltas Tipo I: Llegar tarde, uso inadecuado del uniforme...
+                             Se consideran faltas Tipo II: Agresión escolar, bullying..."
+                        `;
+
+                        // Prompt actualizado para incluir el contexto del Manual
+                        const systemPrompt = `Actúa como un experto en convivencia escolar y rutas de atención integral. Tu objetivo es ayudar a los profesores a tipificar situaciones de conflicto y definir la ruta de acción correcta según el Manual de Convivencia y la legislación vigente (Ley 1620 y Decreto 1965 de 2013).
+
+Cuando te presente un caso o "dato" sobre una situación escolar, debes responder siguiendo esta estructura obligatoria y devolverla en formato JSON:
+
+1. **clasificacion**: Clasifícala estrictamente en una de estas categorías:
+    - "Situación Tipo I": Conflictos manejados inadecuadamente, discusiones verbales, roces o situaciones esporádicas que afectan el clima escolar pero **NO generan daño al cuerpo ni a la salud**. (Ej: Gritos, discusiones, empujones leves sin lesión).
+    - "Situación Tipo II": Agresión escolar, acoso (bullying), ciberacoso o consumo de sustancias que sean **repetitivas** o causen daño al cuerpo/salud **SIN constituir un delito penal**.
+    - "Situación Tipo III": Situaciones que sean presuntos **DELITOS** según la ley penal colombiana. **CRITERIO CLAVE:** Si hay **lesiones personales** (daño físico intencional que constituye delito), violencia sexual, tráfico de drogas o porte de armas, ES AUTOMÁTICAMENTE TIPO III.
+    - "Incumplimiento de Deberes": Si es una falta académica, de asistencia o leve no relacionada con convivencia grave (Ej: Uniforme, llegar tarde).
+
+2. **protocolo_docente**: Protocolo Inmediato para el Docente. Indica qué debe hacer el profesor en el aula (ej. Si es Tipo III: No conciliar, aislar, reportar ya).
+
+3. **ruta_atencion**: Ruta de Atención Integral. Detalla los pasos institucionales.
+
+4. **accion_pedagogica**: Acción Pedagógica Sugerida. Propón una medida formativa y restaurativa.
+
+Contexto importante: Prioriza siempre el interés superior del niño. Recuerda: Las discusiones son Tipo I, los delitos (incluyendo lesiones) son Tipo III.
+
+IMPORTANTE: Debes devolver UNICAMENTE un objeto JSON con este formato exacto:
+{
+  "clasificacion": "string",
+  "protocolo_docente": "string",
+  "ruta_atencion": "string",
+  "accion_pedagogica": "string",
+  "alerta": boolean (true si es Tipo III o requiere ICBF/Policía)
+}`;
+
+                        const safetySettings = [
+                            { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+                            { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+                            { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+                            { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
+                        ];
+
+                        const payload = {
+                            contents: [{ parts: [{ text: "Caso: " + userInput }] }],
+                            systemInstruction: { parts: [{ text: systemPrompt }] },
+                            safetySettings: safetySettings,
+                            generationConfig: {
+                                responseMimeType: "application/json",
+                                temperature: 0.2 // Temperatura baja para mayor precisión legal
+                            }
+                        };
+                        
+                        try {
+                            const response = await this.fetchWithRetry(apiUrl, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload)
+                            });
+
+                            if (!response.ok) throw new Error(`Error API: ${response.status}`);
+
+                            const result = await response.json();
+                            const candidate = result.candidates?.[0];
+                            if (!candidate) throw new Error("La IA no devolvió respuesta.");
+                            
+                            const aiData = JSON.parse(candidate.content.parts[0].text);
+                            
+                            const alertBadge = aiData.alerta ? `<span class="bg-red-500/20 text-red-300 text-[10px] font-bold px-2 py-0.5 rounded border border-red-500/30 flex items-center gap-1 uppercase tracking-wider"><i data-lucide="siren" class="w-3 h-3"></i> Alerta Externa</span>` : '';
+                            
+                            let colorClass = "text-white";
+                            if(aiData.clasificacion.includes("Tipo I")) { colorClass = "text-blue-400"; }
+                            if(aiData.clasificacion.includes("Tipo II")) { colorClass = "text-orange-400"; }
+                            if(aiData.clasificacion.includes("Tipo III")) { colorClass = "text-red-400"; }
+                            if(aiData.clasificacion.includes("Incumplimiento")) { colorClass = "text-teal-400"; }
+
+                            this.aiResponseContainer.innerHTML = `
+                                <div class="mt-6 bg-slate-800/50 rounded-xl border border-slate-700 p-6 relative animate-fade-in-up">
+                                     <div class="flex flex-wrap items-center justify-between mb-4 gap-2">
+                                        <div class="flex items-center gap-3">
+                                            <h4 class="font-bold text-lg ${colorClass}">${this.escapeHTML(aiData.clasificacion)}</h4>
+                                            ${alertBadge}
+                                        </div>
+                                         <button onclick="navigator.clipboard.writeText(this.parentElement.parentElement.innerText); alert('Copiado!')" class="text-slate-500 hover:text-white transition-colors p-1" title="Copiar informe">
+                                            <i data-lucide="copy" class="w-4 h-4"></i>
+                                        </button>
+                                     </div>
+                                    
+                                    <div class="space-y-4">
+                                        <div class="bg-slate-900/30 p-3 rounded-lg border border-slate-700/50">
+                                            <p class="text-xs font-semibold text-brand-400 uppercase tracking-wide mb-1 flex items-center gap-1"><i data-lucide="user-check" class="w-3 h-3"></i> Protocolo Inmediato (Docente)</p>
+                                            <p class="text-slate-300 text-sm leading-relaxed">${this.escapeHTML(aiData.protocolo_docente)}</p>
+                                        </div>
+
+                                        <div class="bg-slate-900/30 p-3 rounded-lg border border-slate-700/50">
+                                            <p class="text-xs font-semibold text-orange-400 uppercase tracking-wide mb-1 flex items-center gap-1"><i data-lucide="git-branch" class="w-3 h-3"></i> Ruta de Atención</p>
+                                            <p class="text-slate-300 text-sm leading-relaxed">${this.escapeHTML(aiData.ruta_atencion)}</p>
+                                        </div>
+
+                                        <div class="bg-slate-900/30 p-3 rounded-lg border border-slate-700/50">
+                                            <p class="text-xs font-semibold text-green-400 uppercase tracking-wide mb-1 flex items-center gap-1"><i data-lucide="sprout" class="w-3 h-3"></i> Acción Pedagógica</p>
+                                            <p class="text-slate-300 text-sm leading-relaxed">${this.escapeHTML(aiData.accion_pedagogica)}</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500 mt-4 italic text-right">Generado por IA basado en Ley 1620. Validar con Comité.</p>
+                                </div>
+                            `;
+                            lucide.createIcons();
+
+                        } catch (error) {
+                            console.error(error);
+                            this.aiResponseContainer.innerHTML = `
+                                <div class="mt-6 bg-red-900/20 border border-red-800 p-4 rounded-lg flex items-center gap-3 text-red-300">
+                                    <i data-lucide="alert-circle" class="w-5 h-5 shrink-0"></i>
+                                    <p class="text-sm">No pudimos analizar el caso. Verifica tu conexión o intenta de nuevo.</p>
+                                </div>`;
+                             lucide.createIcons();
+                        } finally {
+                            this.aiAnalyzeButton.disabled = false;
+                            this.aiAnalyzeButton.innerHTML = '<i data-lucide="zap" class="w-4 h-4"></i> Analizar';
+                        }
+                    });
+                },
+
+                initNavObserver() {
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                const id = entry.target.getAttribute('id');
+                                this.navLinks.forEach(link => {
+                                    // Remove active styles
+                                    link.classList.remove('bg-white', 'dark:bg-slate-700', 'text-brand-600', 'dark:text-brand-400', 'shadow-sm');
+                                    link.classList.add('text-slate-600', 'dark:text-slate-300');
+                                    
+                                    if (link.getAttribute('href') === `#${id}`) {
+                                        // Add active styles
+                                        link.classList.remove('text-slate-600', 'dark:text-slate-300');
+                                        link.classList.add('bg-white', 'dark:bg-slate-700', 'text-brand-600', 'dark:text-brand-400', 'shadow-sm');
+                                    }
+                                });
+                            }
+                        });
+                    }, { rootMargin: '-30% 0px -70% 0px' });
+                    this.sections.forEach(section => observer.observe(section));
+                }
+            };
+            
+            app.init();
+        });
+    </script>
+</body>
+</html>
